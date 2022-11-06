@@ -3,6 +3,6 @@
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint"],
   "rules": {
-    "no-console": 1 // Remember, this means error!
+    "no-console": 0 // Remember, this means error!
   }
 }

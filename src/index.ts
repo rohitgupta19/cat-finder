@@ -16,7 +16,7 @@ app.use(cors(options));
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send('This is a test web page!');
+  res.send('This is a cat finder landing web page!');
 });
 
 console.log('port', port);
