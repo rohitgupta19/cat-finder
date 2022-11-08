@@ -1,20 +1,7 @@
-import express, { Request, Response } from 'express';
-
+import express from 'express';
 const router = express.Router();
+const catController = require('../controllers/catController.controller');
 
-router.get('/', (req: Request, res: Response) => {
-  res.json({
-    success: true,
-    message: 'Cat List'
-  });
-});
-
-router.post('/list', (req: Request, res: Response) => {
-  console.log('req.body', req.body);
-  res.json({
-    success: true,
-    message: 'Cat List'
-  });
-});
+router.route('/list').get(catController.getBreeds);
 
 export default router;
