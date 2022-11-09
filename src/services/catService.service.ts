@@ -53,13 +53,24 @@ const getCatBreedsByCategory = async (categoryId: string) => {
         Accept: 'application/json'
       }
     });
-    let catBreedByCategory = data.filter((cat: Cat) => `cat.${categoryId} === ${process.env.PREFERRED_RATING}`);
+
+    let catBreedByCategory;
+    if(categoryId === 'child_friendly'){
+      catBreedByCategory = data.filter((cat: Cat) => cat.child_friendly === 5);
+    } else if (categoryId === 'stranger_friendly'){
+      catBreedByCategory = data.filter((cat: Cat) => cat.stranger_friendly === 5);
+    } else if (categoryId === 'dog_friendly'){
+      catBreedByCategory = data.filter((cat: Cat) => cat.dog_friendly === 5);
+    }
 
     catBreedByCategory = catBreedByCategory.map((res: Cat) => {
       return {
         id: res.id,
         name: res.name,
         description: res.description,
+        child_friendly: res.child_friendly,
+        stranger_friendly: res.stranger_friendly,
+        dog_friendly: res.dog_friendly
       };
     });
     // Split the breeds array by limit (5 currently can change in .env)
