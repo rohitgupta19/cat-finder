@@ -29,7 +29,7 @@ const getBreedByPreference = async (categoryId: string) => {
       return {
         id: res.id,
         name: res.name,
-        description: res.description,
+        description: res.description
       };
     }));
   } catch (error) {
@@ -45,7 +45,7 @@ const getBreedByPreference = async (categoryId: string) => {
 
 const getCatBreedsByCategory = async (categoryId: string) => {
   try {
-    log.info('categoryId',  categoryId);
+    log.info('categoryId', categoryId);
     const url = `${process.env.API_BASE_URL}/breeds`;
     log.info('url', url);
     const { data } = await axios.get(url, {
@@ -55,11 +55,11 @@ const getCatBreedsByCategory = async (categoryId: string) => {
     });
 
     let catBreedByCategory;
-    if(categoryId === 'child_friendly'){
+    if (categoryId === 'child_friendly') {
       catBreedByCategory = data.filter((cat: Cat) => cat.child_friendly === 5);
-    } else if (categoryId === 'stranger_friendly'){
+    } else if (categoryId === 'stranger_friendly') {
       catBreedByCategory = data.filter((cat: Cat) => cat.stranger_friendly === 5);
-    } else if (categoryId === 'dog_friendly'){
+    } else if (categoryId === 'dog_friendly') {
       catBreedByCategory = data.filter((cat: Cat) => cat.dog_friendly === 5);
     }
 
@@ -74,7 +74,7 @@ const getCatBreedsByCategory = async (categoryId: string) => {
       };
     });
     // Split the breeds array by limit (5 currently can change in .env)
-    return catBreedByCategory.slice(0,process.env.LIMIT);
+    return catBreedByCategory.slice(0, process.env.LIMIT);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       log.error('error message: ', error.message);
