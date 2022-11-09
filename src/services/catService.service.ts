@@ -9,27 +9,13 @@ type Cat = {
   id: number;
   name: string;
   description: string;
-  child_friendly: string;
-  dog_friendly: string;
-  stranger_friendly: string;
+  child_friendly?: number;
+  dog_friendly?: number;
+  stranger_friendly?: number;
 };
 
-const getBreedByPreference = async (
-  child_friendly: boolean,
-  dog_friendly: boolean,
-  stranger_friendly: boolean
-) => {
-  let params = '';
-  if (child_friendly) {
-    params = `&child_friendly=${process.env.CHILD_FRIENDlY}`;
-  } else if (dog_friendly) {
-    params = `&dog_friendly=${process.env.DOG_FRIENDlY}`;
-  } else if (stranger_friendly) {
-    params = `&stranger_friendly=${process.env.STRANGER_FRIENDlY}`;
-  } else {
-    params = `&child_friendly=${process.env.CHILD_FRIENDlY}&dog_friendly=${process.env.DOG_FRIENDlY}&stranger_friendly=${process.env.STRANGER_FRIENDlY}`;
-  }
-
+const getBreedByPreference = async (categoryId: string) => {
+  let params = `&${categoryId}=${process.env.PREFERRED_RATING}`;
   try {
     const url = `${process.env.API_BASE_URL}/breeds?limit=${process.env.LIMIT}${params}`;
     log.info('url', url);
@@ -39,17 +25,45 @@ const getBreedByPreference = async (
       }
     });
 
-    return data = data.map((res: Cat) => {
+    return (data = data.map((res: Cat) => {
       return {
         id: res.id,
         name: res.name,
         description: res.description,
-        child_friendly: res.child_friendly,
-        stranger_friendly: res.stranger_friendly,
-        dog_friendly: res.dog_friendly
+      };
+    }));
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      log.error('error message: ', error.message);
+      return error.message;
+    } else {
+      log.error('unexpected error: ', error);
+      return 'An unexpected error occurred';
+    }
+  }
+};
+
+const getCatBreedsByCategory = async (categoryId: string) => {
+  try {
+    log.info('categoryId',  categoryId);
+    const url = `${process.env.API_BASE_URL}/breeds`;
+    log.info('url', url);
+    const { data } = await axios.get(url, {
+      headers: {
+        Accept: 'application/json'
+      }
+    });
+    let catBreedByCategory = data.filter((cat: Cat) => `cat.${categoryId} === ${process.env.PREFERRED_RATING}`);
+
+    catBreedByCategory = catBreedByCategory.map((res: Cat) => {
+      return {
+        id: res.id,
+        name: res.name,
+        description: res.description,
       };
     });
-    
+    // Split the breeds array by limit (5 currently can change in .env)
+    return catBreedByCategory.slice(0,process.env.LIMIT);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       log.error('error message: ', error.message);
@@ -62,5 +76,6 @@ const getBreedByPreference = async (
 };
 
 module.exports = {
-  getBreedByPreference
+  getBreedByPreference,
+  getCatBreedsByCategory
 };

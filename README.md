@@ -46,30 +46,35 @@ $ npm run prettier
 
 ## Testing the api
 
-Currently the assumption is cat breeds with 5 rating is most popular/user friendly
+Currently the assumption is cat breeds with 5 rating is most popular/user friendly.
+There are 2 API's created
 
-## To fetch the cat breeds by child_friendly parameter
+1. one is fetching all the cat breeds (/category) first and then filtering the records.
 
-http://localhost:3000/cat/list?child_friendly=true
+## API fetching all cat breeds and filtering based on parameter passed :
 
-## To fetch the cat breeds by stranger_friendly parameter
+http://localhost:3000/cat/category?id=child_friendly
 
-http://localhost:3000/cat/list?stranger_friendly=true
+http://localhost:3000/cat/category?id=stranger_friendly
 
-## To fetch the cat breeds by dog_friendly parameter
+http://localhost:3000/cat/category?id=dog_friendly
 
-http://localhost:3000/cat/list?dog_friendly=true
+2. second using limit in the api by fetching the records (/list) but seems buggy.
 
-if no parameter is passed then it will combine all the parameters in a single query by default
-Example : http://localhost:3000/cat/list and the final endpoint which will be executed will be
-(https://api.thecatapi.com/v1/breeds?limit=5&child_friendly=5&dog_friendly=5&stranger_friendly=5)
+## API using limit in the cat api to fetch only 5 :
 
 Note : The API without passing any limit is fetching all the cats but when passing 2 parameters example : https://api.thecatapi.com/v1/breeds?limit=5&dog_friendly=5
 
 its not returning all the cats with only dog_friendly as 5 (max ratings). Also child friendly is only 1 cat with 5 rating
 
-One option to implement is fetching all the cats one without a limit and then filter it with
-5 rating but the requirement is how do we filter the cats if not enough with 5 rating.
-Thats why limit is used in the api and additional paramter as dog_friendly assuming the end api can be fixed.
+## To fetch the cat breeds by child_friendly parameter
 
-If this is not the case then might need some discussion on fetching
+http://localhost:3000/cat/list?id=child_friendly
+
+## To fetch the cat breeds by stranger_friendly parameter
+
+http://localhost:3000/cat/list?id=stranger_friendly
+
+## To fetch the cat breeds by dog_friendly parameter
+
+http://localhost:3000/cat/list?id=dog_friendly

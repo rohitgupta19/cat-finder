@@ -4,16 +4,21 @@ const log = require('loglevel');
 const apiLoglevel = process.env.LOG_LEVEL;
 log.setLevel(apiLoglevel);
 
-const getBreeds = async (req: Request, res: Response) => {
-  log.info('getBreeds', req.query);
-  const child_friendly =
-    req.query.child_friendly && req.query.child_friendly === 'true' ? true : false;
-  const dog_friendly = req.query.dog_friendly && req.query.dog_friendly === 'true' ? true : false;
-  const stranger_friendly =
-    req.query.stranger_friendly && req.query.stranger_friendly === 'true' ? true : false;
-  res.send(await catService.getBreedByPreference(child_friendly, dog_friendly, stranger_friendly));
+const getCatBreeds = async (req: Request, res: Response) => {
+  log.info('req.query', req.query);
+  const categoryId = req.query.id;
+  const catListByPreference = await catService.getBreedByPreference(categoryId);
+  res.send({ status: 'success', data: catListByPreference });
+};
+
+const getCatBreedsByCategory = async (req: Request, res: Response) => {
+  log.info('req.query', req.query);
+  const categoryId = req.query.id;
+  const catBreedByCategory = await catService.getCatBreedsByCategory(categoryId);
+  res.send({ status: 'success', data: catBreedByCategory });
 };
 
 module.exports = {
-  getBreeds
+  getCatBreeds,
+  getCatBreedsByCategory
 };
